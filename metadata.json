@@ -1,0 +1,8 @@
+{
+  "name": "Automação 10x",
+  "description": "Transforme seu WhatsApp em uma máquina de agendamentos 24/7 com uma secretária digital avançada para procedimentos estéticos e clínicas.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

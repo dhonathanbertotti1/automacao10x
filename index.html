@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automação 10x | Inteligência Artificial para Clínicas de Estética</title>
+    <meta name="description" content="Automatize o WhatsApp da sua clínica de estética 24/7. Agende Botox e procedimentos estéticos automaticamente com Inteligência Artificial avançada.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    },
+                    colors: {
+                        obsidian: '#050806',
+                        emeraldCl: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            900: '#064e3b',
+                            950: '#022c22',
+                        }
+                    },
+                    animation: {
+                        'gradient': 'gradient 8s linear infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        gradient: {
+                            '0%, 100%': { 'background-position': '0% 50%' },
+                            '50%': { 'background-position': '100% 50%' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply bg-obsidian text-slate-100 antialiased selection:bg-emerald-500/20 selection:text-emerald-300;
+            }
+        }
+        @layer utilities {
+            .bg-grid {
+                background-image: 
+                    linear-gradient(to right, rgba(52, 211, 153, 0.02) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(52, 211, 153, 0.02) 1px, transparent 1px);
+                background-size: 30px 30px;
+            }
+            .bg-grid-fade {
+                mask-image: radial-gradient(circle at center, black 10%, transparent 85%);
+            }
+            .glass-card {
+                @apply bg-zinc-950/65 backdrop-blur-3xl border border-emerald-500/15 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)];
+                position: relative;
+                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            .glass-card-hover {
+                @apply hover:border-emerald-500/35 hover:shadow-[0_0_50px_rgba(16,185,129,0.18)] transition-all duration-300;
+            }
+            .glow-emerald {
+                box-shadow: 0 0 60px -10px rgba(16, 185, 129, 0.3);
+            }
+            .glow-gold {
+                box-shadow: 0 0 60px -10px rgba(245, 158, 11, 0.25);
+            }
+            .reveal {
+                opacity: 0;
+                transform: translateY(24px);
+                transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            .reveal.active {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .message-fade-in {
+                animation: messageFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            }
+            @keyframes messageFadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(16px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            .pulse-ring {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+                animation: pulseRing 2s infinite;
+            }
+            @keyframes pulseRing {
+                0% {
+                    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+                }
+                70% {
+                    box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+                }
+                100% {
+                    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+                }
+            }
+            .smooth-shimmer {
+                background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0) 100%);
+                background-size: 200% 100%;
+                animation: shimmerAnim 3s infinite;
+            }
+            @keyframes shimmerAnim {
+                0% { background-position: -200% 0; }
+                100% { background-position: 200% 0; }
+            }
+
+            /* High-End Neon Button with Rotating Circular Aura */
+            .neon-glow-btn {
+                position: relative;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 1rem;
+                padding: 1.5px; /* Border thickness */
+                overflow: hidden;
+                transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+                box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+                cursor: pointer;
+            }
+            .neon-glow-btn::before {
+                content: '';
+                position: absolute;
+                top: -150%;
+                left: -150%;
+                width: 400%;
+                height: 400%;
+                background: conic-gradient(
+                    from 0deg,
+                    transparent 30%,
+                    #10b981 45%,
+                    #34d399 55%,
+                    transparent 70%,
+                    #f59e0b 85%,
+                    #10b981 100%
+                );
+                animation: rotateNeon 3.5s linear infinite;
+                z-index: 0;
+                opacity: 0.95;
+                transition: opacity 0.3s ease;
+            }
+            .neon-glow-btn-shadow {
+                position: absolute;
+                inset: -6px;
+                border-radius: 1.25rem;
+                background: conic-gradient(
+                    from 0deg,
+                    transparent 30%,
+                    #10b981 45%,
+                    #34d399 55%,
+                    transparent 70%,
+                    #f59e0b 85%,
+                    #10b981 100%
+                );
+                animation: rotateNeon 3.5s linear infinite;
+                filter: blur(16px);
+                opacity: 0.35;
+                z-index: -1;
+                transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            .neon-glow-btn-inner {
+                position: relative;
+                z-index: 2;
+                width: 100%;
+                height: 100%;
+                background: #050806; /* Deep obsidian background */
+                border-radius: calc(1rem - 1.5px);
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                color: #ffffff;
+                transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            .neon-glow-btn:hover {
+                transform: scale(1.04) translateY(-2px);
+                box-shadow: 0 0 40px 4px rgba(16, 185, 129, 0.55), 0 0 15px -1px rgba(245, 158, 11, 0.25);
+            }
+            .neon-glow-btn:hover .neon-glow-btn-shadow {
+                opacity: 0.95;
+                filter: blur(20px);
+            }
+            .neon-glow-btn:hover .neon-glow-btn-inner {
+                background: rgba(8, 12, 10, 0.92);
+                color: #34d399;
+            }
+            .neon-glow-btn:active {
+                transform: scale(0.97) translateY(1px);
+            }
+            .neon-sweep {
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(
+                    90deg,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, 0.15) 50%,
+                    rgba(255, 255, 255, 0) 100%
+                );
+                transform: translateX(-100%);
+                z-index: 3;
+                pointer-events: none;
+            }
+            .neon-glow-btn:hover .neon-sweep {
+                animation: sweepEffect 1s ease-out forwards;
+            }
+            @keyframes sweepEffect {
+                0% { transform: translateX(-100%); }
+                100% { transform: translateX(100%); }
+            }
+            @keyframes rotateNeon {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+
+            /* Neon Background Pulsing Ambient Lights */
+            .neon-ambient-emerald {
+                position: absolute;
+                background: radial-gradient(circle, rgba(16, 201, 135, 0.08) 0%, rgba(16, 185, 129, 0.02) 50%, transparent 100%);
+                border-radius: 100%;
+                filter: blur(80px);
+                pointer-events: none;
+                mix-blend-mode: screen;
+                animation: pulseGlow 10s infinite ease-in-out alternate;
+            }
+            .neon-ambient-amber {
+                position: absolute;
+                background: radial-gradient(circle, rgba(245, 158, 11, 0.06) 0%, rgba(245, 158, 11, 0.015) 55%, transparent 100%);
+                border-radius: 100%;
+                filter: blur(90px);
+                pointer-events: none;
+                mix-blend-mode: screen;
+                animation: pulseGlow 8s infinite ease-in-out alternate-reverse;
+            }
+            @keyframes pulseGlow {
+                0% { transform: scale(0.9) translate(0, 0); opacity: 0.7; }
+                50% { transform: scale(1.1) translate(20px, -15px); opacity: 1; }
+                100% { transform: scale(0.95) translate(-10px, 10px); opacity: 0.8; }
+            }
+
+            /* High-Fidelity Animated FAQ Icons & States */
+            .faq-toggle .faq-icon-container {
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                background: rgba(255, 255, 255, 0.05);
+                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            .faq-toggle:hover .faq-icon-container {
+                background: rgba(16, 185, 129, 0.1);
+                border-color: rgba(16, 185, 129, 0.25);
+                color: #34d399;
+                box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
+            }
+            .faq-toggle.faq-open .faq-icon-container {
+                background: rgba(16, 185, 129, 0.15);
+                border-color: rgba(16, 185, 129, 0.35);
+                color: #34d399;
+                box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
+            }
+            .faq-toggle .faq-line-v {
+                transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            .faq-toggle.faq-open .faq-line-v {
+                transform: rotate(90deg) scaleY(0);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden font-sans">
+
+    <!-- Mouse Glow -->
+    <div id="mouse-glow" class="pointer-events-none fixed inset-0 z-30 transition-opacity duration-500 opacity-0 md:opacity-100" style="background: radial-gradient(600px circle at 0px 0px, rgba(16, 185, 129, 0.04), transparent 80%);"></div>
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-emerald-500 via-emerald-400 to-amber-300 z-[60] w-0 transition-all duration-100"></div>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-4 md:py-6">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <div class="flex items-center gap-3 group cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <div class="w-10 h-10 bg-gradient-to-tr from-emerald-600 to-emerald-400 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:rotate-6 transition-all duration-300">
+                    <i data-lucide="bot" class="text-white w-5 h-5"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-lg font-extrabold tracking-tighter text-white uppercase leading-none">Automação 10x<span class="text-emerald-400">™</span></span>
+                    <span class="text-[9px] font-bold text-amber-300 uppercase tracking-widest mt-0.5">Secretária Inteligente</span>
+                </div>
+            </div>
+
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#problema" class="text-xs font-semibold uppercase tracking-widest text-slate-400 hover:text-white transition-colors relative group">
+                    O Problema
+                    <span class="absolute -bottom-1 left-0 w-0 h-px bg-emerald-400 group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="#solucao" class="text-xs font-semibold uppercase tracking-widest text-slate-400 hover:text-white transition-colors relative group">
+                    Benefícios
+                    <span class="absolute -bottom-1 left-0 w-0 h-px bg-emerald-400 group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="#funcionamento" class="text-xs font-semibold uppercase tracking-widest text-slate-400 hover:text-white transition-colors relative group">
+                    Como Funciona
+                    <span class="absolute -bottom-1 left-0 w-0 h-px bg-emerald-400 group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="#planos" class="text-xs font-semibold uppercase tracking-widest text-slate-400 hover:text-white transition-colors relative group">
+                    Investimento
+                    <span class="absolute -bottom-1 left-0 w-0 h-px bg-emerald-400 group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="#faq" class="text-xs font-semibold uppercase tracking-widest text-slate-400 hover:text-white transition-colors relative group">
+                    FAQ
+                    <span class="absolute -bottom-1 left-0 w-0 h-px bg-emerald-400 group-hover:w-full transition-all duration-300"></span>
+                </a>
+                
+                <div onclick="document.getElementById('planos').scrollIntoView({ behavior: 'smooth' })" class="neon-glow-btn group hidden md:inline-flex cursor-pointer">
+                    <div class="neon-glow-btn-shadow"></div>
+                    <div class="neon-sweep"></div>
+                    <div class="neon-glow-btn-inner px-6 py-3 text-xs font-extrabold uppercase tracking-widest gap-2">
+                        <span>Ver Planos</span>
+                    </div>
+                </div>
+            </div>
+
+            <button id="mobile-menu-btn" class="md:hidden text-white hover:text-emerald-400 transition-colors p-1" aria-label="Toggle Menu">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-obsidian/95 backdrop-blur-2xl border-b border-emerald-500/10 overflow-hidden transition-all duration-300">
+            <div class="flex flex-col p-8 gap-6 border-t border-emerald-500/5">
+                <a href="#problema" class="text-base font-bold text-slate-300 hover:text-emerald-400 transition-colors menu-link">O Problema</a>
+                <a href="#solucao" class="text-base font-bold text-slate-300 hover:text-emerald-400 transition-colors menu-link">Benefícios</a>
+                <a href="#funcionamento" class="text-base font-bold text-slate-300 hover:text-emerald-400 transition-colors menu-link">Como Funciona</a>
+                <a href="#planos" class="text-base font-bold text-slate-300 hover:text-emerald-400 transition-colors menu-link">Planos de Investimento</a>
+                <a href="#faq" class="text-base font-bold text-slate-300 hover:text-emerald-400 transition-colors menu-link">FAQ</a>
+                <button onclick="document.getElementById('planos').scrollIntoView({ behavior: 'smooth' })" class="w-full bg-emerald-500 text-obsidian px-6 py-4 rounded-xl text-center font-extrabold uppercase tracking-widest hover:bg-emerald-400 transition-all menu-link">
+                    Ver Planos
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 md:pt-44 pb-20 md:pb-28 overflow-hidden min-h-screen flex items-center bg-obsidian">
+        <!-- Background Ornaments -->
+        <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+            <div class="absolute inset-0 bg-grid bg-grid-fade opacity-30"></div>
+            <!-- Robust animated glowing neon spots to reduce opacity/dullness -->
+            <div class="neon-ambient-emerald top-[10%] left-[5%] w-[600px] h-[600px]"></div>
+            <div class="neon-ambient-amber bottom-[10%] right-[5%] w-[500px] h-[500px]"></div>
+        </div>
+
+        <canvas class="matrix-canvas absolute inset-0 w-full h-full pointer-events-none opacity-20 z-[1]"></canvas>
+
+        <div class="max-w-7xl mx-auto px-6 relative z-10 w-full">
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Hero Core Content (Left side) -->
+                <div class="lg:col-span-7 text-left reveal active">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+                        <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i> Gestão de Alta Performance
+                    </div>
+                    
+                    <!-- Super Headline -->
+                    <p class="text-emerald-400 font-extrabold text-sm md:text-base uppercase tracking-wider mb-3 leading-tight">
+                        Transforme seu WhatsApp em uma máquina de agendamentos que funciona 24 horas por dia, 7 dias por semana.
+                    </p>
+                    
+                    <!-- Headline Principal -->
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tighter leading-[1.05] mb-6 font-serif">
+                        Conecte uma <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-300">Inteligência Artificial</span> avançada no WhatsApp da sua clínica
+                    </h1>
+                    
+                    <!-- Subheadline -->
+                    <p class="text-slate-300 text-base md:text-lg max-w-2xl mb-8 leading-relaxed font-normal">
+                        Chega de perder clientes de alto valor na madrugada ou por demora no atendimento. Conecte uma secretária digital inteligente focada em lotar a sua agenda de Botox e procedimentos estéticos, que ouve áudios, consulta sua agenda e fecha horários sozinha.
+                    </p>
+
+                    <!-- CTAs -->
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-10">
+                        <div onclick="document.getElementById('planos').scrollIntoView({ behavior: 'smooth' })" class="neon-glow-btn group w-full sm:w-auto cursor-pointer">
+                            <div class="neon-glow-btn-shadow"></div>
+                            <div class="neon-sweep"></div>
+                            <div class="neon-glow-btn-inner px-8 py-4 text-xs sm:text-sm font-extrabold uppercase tracking-widest flex items-center justify-center gap-3 min-w-[280px]">
+                                <span>Quero Modernizar Meu Atendimento</span>
+                                <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform text-emerald-400 group-hover:text-amber-300"></i>
+                            </div>
+                        </div>
+                        
+                        <a href="#planos" class="flex items-center justify-center gap-2 text-slate-400 hover:text-white font-bold text-xs uppercase tracking-widest py-3 px-4 rounded-xl border border-white/5 hover:border-white/10 transition-all">
+                            Ver Planos e Valores
+                        </a>
+                    </div>
+
+                    <!-- Trust Stats Badge -->
+                    <div class="flex flex-wrap items-center gap-6 text-slate-400 text-xs font-bold uppercase tracking-wider border-t border-emerald-500/10 pt-6">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+                            <span>Atendimento 100% Seguro</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="clock" class="w-4 h-4 text-emerald-400"></i>
+                            <span>Tempo de Resposta &lt; 5 Segundos</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Aesthetic UI mockup (Right side) -->
+                <div class="lg:col-span-5 relative reveal" style="transition-delay: 0.15s">
+                    <div class="absolute inset-0 bg-emerald-500/10 blur-[80px] rounded-full -z-10"></div>
+                    
+                    <!-- Floating Micro-badges -->
+                    <div class="absolute -left-6 top-12 z-20 animate-float scale-90 sm:scale-100 hidden sm:block" style="animation-duration: 5s">
+                        <div class="glass-card px-5 py-3 rounded-2xl flex items-center gap-3 shadow-2xl">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                                <i data-lucide="calendar" class="w-4.5 h-4.5"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Sincronização</p>
+                                <p class="text-xs text-white font-extrabold">Agenda Atualizada</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="absolute -right-4 bottom-12 z-20 animate-float scale-90 sm:scale-100 hidden sm:block" style="animation-duration: 4s; animation-delay: 1.5s">
+                        <div class="glass-card px-5 py-3 rounded-2xl flex items-center gap-3 shadow-2xl border-amber-500/10">
+                            <div class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-300">
+                                <i data-lucide="sparkles" class="w-4.5 h-4.5"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-[9px] text-amber-300 font-bold uppercase tracking-widest">Especialidade</p>
+                                <p class="text-xs text-white font-extrabold">Foco em Estética & Botox</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Luxury WhatsApp Simulation Frame -->
+                    <div class="glass-card rounded-[2rem] border-emerald-500/20 p-1 overflow-hidden shadow-[0_0_50px_rgba(16,185,129,0.1)]">
+                        <!-- Phone Header bar -->
+                        <div class="bg-zinc-950 px-5 py-4 flex items-center justify-between border-b border-emerald-500/10 select-none">
+                            <div class="flex items-center gap-3">
+                                <div class="relative">
+                                    <div class="w-9 h-9 rounded-full bg-emerald-950 border border-emerald-500/30 flex items-center justify-center overflow-hidden">
+                                        <i data-lucide="bot" class="w-4 h-4 text-emerald-400"></i>
+                                    </div>
+                                    <div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-zinc-950 animate-pulse"></div>
+                                </div>
+                                <div class="text-left">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="text-xs font-black text-white">Secretária Digital</span>
+                                        <span class="text-[8px] bg-emerald-500/20 text-emerald-300 font-extrabold px-1 rounded">IA</span>
+                                    </div>
+                                    <span class="text-[8.5px] text-emerald-400/80 font-bold tracking-wide uppercase">Atendimento Premium Online</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 text-slate-400">
+                                <i data-lucide="phone" class="w-4 h-4 cursor-pointer hover:text-white transition-colors"></i>
+                                <i data-lucide="info" class="w-4 h-4 cursor-pointer hover:text-white transition-colors"></i>
+                            </div>
+                        </div>
+
+                        <!-- Chat Area with interactive simulation of booking botox -->
+                        <div id="simulated-chat-box" class="bg-gradient-to-b from-[#090e0c] to-obsidian p-5 h-[340px] overflow-y-auto space-y-4 text-left text-xs custom-scrollbar">
+                            
+                            <!-- Day indicator -->
+                            <div class="text-center">
+                                <span class="bg-zinc-900 text-slate-500 text-[9px] font-black tracking-widest uppercase px-2.5 py-1 rounded-md">Hoje • Teste em Tempo Real</span>
+                            </div>
+
+                            <!-- Bot Message 1 -->
+                            <div class="flex items-start gap-2.5 max-w-[85%]">
+                                <div class="w-6 h-6 rounded-full bg-emerald-950 border border-emerald-500/30 flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="bot" class="w-3.5 h-3.5 text-emerald-400"></i>
+                                </div>
+                                <div class="bg-zinc-900 border border-white/5 rounded-2xl rounded-tl-none p-3 text-slate-200">
+                                    Olá, seja muito bem-vinda à clínica de estética de alta performance! Como posso te ajudar hoje? Deseja agendar sua consulta de Botox ou saber mais sobre nossos tratamentos?
+                                </div>
+                            </div>
+
+                            <!-- User Message 1 -->
+                            <div class="flex items-start gap-2.5 max-w-[85%] ml-auto justify-end">
+                                <div class="bg-emerald-950/40 border border-emerald-500/10 rounded-2xl rounded-tr-none p-3 text-slate-100">
+                                    Olá! Gostaria de saber os horários disponíveis para fazer Botox essa semana no final do dia.
+                                </div>
+                            </div>
+
+                            <!-- Bot Message 2 -->
+                            <div class="flex items-start gap-2.5 max-w-[85%]">
+                                <div class="w-6 h-6 rounded-full bg-emerald-950 border border-emerald-500/30 flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="bot" class="w-3.5 h-3.5 text-emerald-400"></i>
+                                </div>
+                                <div class="bg-zinc-900 border border-white/5 rounded-2xl rounded-tl-none p-3 text-slate-200 space-y-2">
+                                    <p>Perfeito! Nosso sistema localizou os seguintes horários de estética disponíveis no final do dia:</p>
+                                    <p class="font-bold text-amber-300">
+                                        Quinta-feira às 17:30<br>
+                                        Sexta-feira às 18:00
+                                    </p>
+                                    <p>Qual deles fica melhor para você?</p>
+                                </div>
+                            </div>
+
+                            <!-- User Audio Message Simulator -->
+                            <div class="flex items-start gap-2.5 max-w-[85%] ml-auto justify-end">
+                                <div class="bg-emerald-950/40 border border-emerald-500/10 rounded-2xl rounded-tr-none p-3 text-slate-100 w-full">
+                                    <div class="flex items-center gap-3">
+                                        <button class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center hover:scale-105 active:scale-95 transition-all">
+                                            <i data-lucide="play" class="w-3.5 h-3.5 fill-emerald-400"></i>
+                                        </button>
+                                        <div class="flex-grow">
+                                            <!-- Simple visual audio waves -->
+                                            <div class="flex items-end gap-0.5 h-5">
+                                                <div class="w-0.5 bg-emerald-400 rounded-full h-[30%]"></div>
+                                                <div class="w-0.5 bg-emerald-400 rounded-full h-[60%]"></div>
+                                                <div class="w-0.5 bg-emerald-400 rounded-full h-[80%]"></div>
+                                                <div class="w-0.5 bg-emerald-400 rounded-full h-[40%]"></div>
+                                                <div class="w-0.5 bg-emerald-400 rounded-full h-[90%]"></div>
+                                                <div class="w-0.5 bg-emerald-400 rounded-full h-[20%]"></div>
+                                                <div class="w-0.5 bg-emerald-400 rounded-full h-[70%]"></div>
+                                                <div class="w-0.5 bg-emerald-500 rounded-full h-[85%]"></div>
+                                                <div class="w-0.5 bg-emerald-500 rounded-full h-[50%]"></div>
+                                                <div class="w-0.5 bg-emerald-500 rounded-full h-[30%]"></div>
+                                                <div class="w-0.5 bg-emerald-500 rounded-full h-[95%]"></div>
+                                                <div class="w-0.5 bg-emerald-500 rounded-full h-[15%]"></div>
+                                            </div>
+                                        </div>
+                                        <span class="text-[9px] text-emerald-400/60 font-bold">0:06</span>
+                                    </div>
+                                    <div class="text-[9.5px] italic text-emerald-400/80 mt-2 border-t border-emerald-500/10 pt-1 flex items-center gap-1.5">
+                                        <i data-lucide="mic" class="w-2.5 h-2.5"></i>
+                                        <span>Mensagem de Áudio Escutada</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bot Message 3 (Transcribing audio + confirmation) -->
+                            <div class="flex items-start gap-2.5 max-w-[85%]">
+                                <div class="w-6 h-6 rounded-full bg-emerald-950 border border-emerald-500/30 flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="bot" class="w-3.5 h-3.5 text-emerald-400"></i>
+                                </div>
+                                <div class="bg-zinc-900 border border-white/5 rounded-2xl rounded-tl-none p-3 text-slate-200 space-y-2">
+                                    <p class="text-[9.5px] font-bold text-emerald-400 bg-emerald-500/5 px-2 py-0.5 rounded border border-emerald-500/10 inline-flex items-center gap-1">
+                                        <i data-lucide="mic" class="w-2.5 h-2.5"></i> Áudio transcrito: "Quinta 17:30 por favor..."
+                                    </p>
+                                    <p>Perfeito! Entendido. Acabei de realizar a sua reserva no sistema de procedimentos!</p>
+                                    <p class="font-extrabold text-white bg-zinc-950 p-2 rounded-lg border border-white/5">
+                                        Tratamento: Botox Estético<br>
+                                        Horário: Quinta-feira às 17h30<br>
+                                        Paciente: Confirmado!
+                                    </p>
+                                    <p>Seu lembrete anti-falta foi gerado. Nos vemos na quinta-feira!</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chat Input bar -->
+                        <div class="bg-zinc-950 p-3 flex items-center gap-2 border-t border-emerald-500/10 select-none">
+                            <i data-lucide="sparkles" class="text-emerald-400 w-4 h-4 ml-1 animate-pulse-slow"></i>
+                            <div id="chat-input-status" class="flex-grow bg-zinc-900/40 rounded-xl px-3 py-2 text-[10px] text-slate-500 tracking-wide text-left border border-white/5 transition-all duration-300">
+                                Secretária Digital online...
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-emerald-500 text-obsidian flex items-center justify-center">
+                                <i data-lucide="mic" class="w-3.5 h-3.5"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: O Problema -->
+    <section id="problema" class="py-20 md:py-32 bg-obsidian relative border-t border-emerald-500/5 overflow-hidden">
+        <!-- background radial decoration -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+            <div class="neon-ambient-amber top-1/4 -left-96 w-[600px] h-[600px]"></div>
+            <div class="neon-ambient-emerald bottom-1/4 -right-96 w-[500px] h-[500px]"></div>
+        </div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+                
+                <div class="reveal">
+                    <span class="text-amber-300 font-black uppercase tracking-[0.3em] text-xs mb-4 block flex items-center gap-2">
+                        <i data-lucide="info" class="w-4 h-4"></i> O Gargalo das Clínicas
+                    </span>
+                    
+                    <!-- Título -->
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-8 tracking-tighter leading-[1.05] font-serif">
+                        Quanto custa uma <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#d14343] to-amber-300">mensagem não respondida</span> na sua clínica?
+                    </h2>
+                    
+                    <!-- Texto Principal -->
+                    <div class="text-slate-300 text-base md:text-lg space-y-6 leading-relaxed mb-8">
+                        <p>
+                            No mercado de estética, <span class="text-white font-extrabold underline decoration-emerald-500/60">o imediatismo é tudo</span>. Se uma cliente decide fazer um botox às 22h de um domingo e a sua equipe só responde na segunda-feira às 9h, ela já fechou com o seu concorrente.
+                        </p>
+                        <p>
+                            Além disso, sua secretária humana <span class="text-amber-300 font-semibold">perde horas valiosas</span> do dia apenas confirmando horários e digitando as mesmas respostas, em vez de focar em um atendimento VIP para quem já está dentro da clínica.
+                        </p>
+                    </div>
+
+                    <!-- Bullet points showing issues -->
+                    <div class="grid gap-4 mt-8">
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-zinc-950/20 border border-red-500/10">
+                            <div class="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center text-red-400 flex-shrink-0 mt-0.5">
+                                <i data-lucide="x" class="w-4.5 h-4.5"></i>
+                            </div>
+                            <div>
+                                <p class="text-white font-bold text-sm">Contatos abandonados na noite/fins de semana</p>
+                                <p class="text-slate-400 text-xs mt-0.5">Procedimentos de alto valor perdidos para concorrentes rápidos.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-zinc-950/20 border border-red-500/10">
+                            <div class="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center text-red-400 flex-shrink-0 mt-0.5">
+                                <i data-lucide="x" class="w-4.5 h-4.5"></i>
+                            </div>
+                            <div>
+                                <p class="text-white font-bold text-sm">Sobrecarga crônica na recepção</p>
+                                <p class="text-slate-400 text-xs mt-0.5">Secretárias sobrecarregadas com dúvidas simples que não trazem conversão imediata.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROI Statistics Card and calculation block (Right Column) -->
+                <div class="relative mt-12 lg:mt-0 reveal" style="transition-delay: 0.2s">
+                    <div class="absolute inset-0 bg-emerald-600/5 blur-[100px] -z-10"></div>
+                    <div class="glass-card rounded-[2rem] p-8 md:p-10 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent"></div>
+                        <span class="text-emerald-400 font-extrabold uppercase tracking-[0.4em] text-[10px] mb-6 block text-center">Simulador Científico de Perda</span>
+                        
+                        <h3 class="text-lg font-bold text-center text-white uppercase tracking-wider mb-6">Calcule o Faturamento Recuperável</h3>
+
+                        <!-- Interactive Slider Calculator -->
+                        <div class="space-y-6">
+                            <!-- Slider 1 -->
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <label class="text-xs text-slate-400 uppercase tracking-widest font-bold">Ticket Médio por Procedimento</label>
+                                    <span id="ticket-val-label" class="text-sm font-extrabold text-amber-300">R$ 1.200</span>
+                                </div>
+                                <input id="ticket-slider" type="range" min="300" max="4000" step="50" value="1200" class="w-full accent-emerald-400 bg-zinc-900 rounded-lg cursor-pointer h-1.5 focus:outline-none">
+                            </div>
+
+                            <!-- Slider 2 -->
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <label class="text-xs text-slate-400 uppercase tracking-widest font-bold">Agendamentos Perdidos por Mês</label>
+                                    <span id="lost-val-label" class="text-sm font-extrabold text-amber-300">5 perdidos</span>
+                                </div>
+                                <input id="lost-slider" type="range" min="1" max="25" step="1" value="5" class="w-full accent-emerald-400 bg-zinc-900 rounded-lg cursor-pointer h-1.5 focus:outline-none">
+                            </div>
+
+                            <!-- Results display -->
+                            <div class="bg-zinc-950 p-6 rounded-2xl border border-emerald-500/10 text-center space-y-4 glow-emerald">
+                                <p class="text-[10px] text-slate-400 uppercase tracking-widest font-extrabold">Faturamento que você deixa na mesa hoje:</p>
+                                <div class="text-3xl md:text-4xl font-black text-rose-500 tracking-tight" id="loss-result">
+                                    R$ 6.000,00
+                                </div>
+                                <p class="text-[9.5px] font-medium text-emerald-400">
+                                    Recuperável automaticamente com o sistema Automação 10x
+                                </p>
+                            </div>
+
+                            <div class="text-center">
+                                <button onclick="document.getElementById('planos').scrollIntoView({ behavior: 'smooth' })" class="w-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold uppercase tracking-wider text-[11px] py-4 rounded-xl transition-all">
+                                    Estancar Perda de Faturamento Agora
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: A Solução -->
+    <section id="solucao" class="py-20 md:py-32 bg-zinc-950 relative overflow-hidden border-t border-emerald-500/5">
+        <!-- background radial decoration -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+            <div class="neon-ambient-emerald top-1/3 -right-64 w-[700px] h-[700px]"></div>
+            <div class="neon-ambient-amber bottom-1/3 -left-64 w-[600px] h-[600px]"></div>
+        </div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            
+            <div class="text-center mb-16 md:mb-24 reveal">
+                <span class="text-emerald-400 font-extrabold uppercase tracking-[0.4em] text-xs mb-4 block">Segurança e Agilidade</span>
+                <h2 class="text-4xl md:text-6xl font-black text-white tracking-tighter font-serif">Conheça a sua nova <span class="italic text-amber-300">Secretária Inteligente</span></h2>
+                <p class="text-slate-400 text-sm md:text-base max-w-2xl mx-auto mt-4 leading-relaxed font-semibold">
+                    Tecnologia integrada diretamente ao seu número oficial que funciona com total estabilidade.
+                </p>
+            </div>
+
+            <!-- Grid of Benefits -->
+            <div class="grid md:grid-cols-2 gap-6 md:gap-8">
+                
+                <!-- Benefit 1: Entende Áudio e Texto -->
+                <div class="glass-card glass-card-hover p-8 md:p-10 rounded-[2rem] group relative overflow-hidden reveal" style="transition-delay: 0.1s">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-emerald-500/10 to-transparent rounded-bl-full pointer-events-none"></div>
+                    <div class="w-14 h-14 bg-[#10b981]/10 rounded-2xl flex items-center justify-center text-emerald-400 mb-8 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-amber-950 transition-all duration-500">
+                        <i data-lucide="mic" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center gap-1.5 mb-3">
+                        <span class="text-xs bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-extrabold">Entende Áudio e Texto</span>
+                    </div>
+                    <h3 class="text-xl font-extrabold text-white mb-4 tracking-tight uppercase">Audio Inteligente</h3>
+                    <p class="text-slate-400 leading-relaxed font-medium text-sm">
+                        Suas clientes adoram mandar áudios longos contando todos os detalhes do procedimento que desejam? Sem problemas. A IA ouve, entende o contexto perfeitamente e responde em segundos no WhatsApp com total educação e presteza.
+                    </p>
+                </div>
+
+                <!-- Benefit 2: Conexão Direta com a Agenda -->
+                <div class="glass-card glass-card-hover p-8 md:p-10 rounded-[2rem] group relative overflow-hidden reveal" style="transition-delay: 0.2s">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-emerald-500/10 to-transparent rounded-bl-full pointer-events-none"></div>
+                    <div class="w-14 h-14 bg-[#10b981]/10 rounded-2xl flex items-center justify-center text-emerald-400 mb-8 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-amber-950 transition-all duration-500">
+                        <i data-lucide="calendar" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center gap-1.5 mb-3">
+                        <span class="text-xs bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-extrabold">Conexão Direta com a Agenda</span>
+                    </div>
+                    <h3 class="text-xl font-extrabold text-white mb-4 tracking-tight uppercase">Sincronização Ativa</h3>
+                    <p class="text-slate-400 leading-relaxed font-medium text-sm">
+                        O bot conecta-se com o sistema da sua clínica e checa os horários livres em tempo real. Se o paciente manifestar interesse por Botox ou preenchimento labial, ela oferece as brechas corretas de forma instantânea. Se aceitar, a vaga é reservada imediatamente na sua agenda.
+                    </p>
+                </div>
+
+                <!-- Benefit 3: Lembrete Anti-Faltas -->
+                <div class="glass-card glass-card-hover p-8 md:p-10 rounded-[2rem] group relative overflow-hidden reveal" style="transition-delay: 0.3s">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-emerald-500/10 to-transparent rounded-bl-full pointer-events-none"></div>
+                    <div class="w-14 h-14 bg-[#10b981]/10 rounded-2xl flex items-center justify-center text-emerald-400 mb-8 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-amber-950 transition-all duration-500">
+                        <i data-lucide="bell" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center gap-1.5 mb-3">
+                        <span class="text-xs bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-extrabold">Lembrete Anti-Faltas</span>
+                    </div>
+                    <h3 class="text-xl font-extrabold text-white mb-4 tracking-tight uppercase">Proteção de Lucro</h3>
+                    <p class="text-slate-400 leading-relaxed font-medium text-sm">
+                        As faltas estragam a eficiência de qualquer clínica de estética de alta performance. Nossa IA envia mensagens personalizadas, cordiais e acolhedoras para confirmar o horário horas antes, reduzindo drasticamente o índice de clientes que simplesmente esquecem e acabam sumindo.
+                    </p>
+                </div>
+
+                <!-- Benefit 4: Recuperação e Pós-Venda -->
+                <div class="glass-card glass-card-hover p-8 md:p-10 rounded-[2rem] group relative overflow-hidden reveal" style="transition-delay: 0.4s">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-emerald-500/10 to-transparent rounded-bl-full pointer-events-none"></div>
+                    <div class="w-14 h-14 bg-[#10b981]/10 rounded-2xl flex items-center justify-center text-emerald-400 mb-8 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-amber-950 transition-all duration-500">
+                        <i data-lucide="refresh-cw" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center gap-1.5 mb-3">
+                        <span class="text-xs bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-extrabold">Recuperação e Pós-Venda (Efeito 30 Dias)</span>
+                    </div>
+                    <h3 class="text-xl font-extrabold text-white mb-4 tracking-tight uppercase">Retoque Recorrente</h3>
+                    <p class="text-slate-400 leading-relaxed font-medium text-sm">
+                        O efeito do Botox ou preenchedores diminui depois de alguns meses. O nosso sistema lembra as clientes de que está se aproximando o momento exato do retoque. Isso gera faturamento recorrente sólido na clínica de forma 100% autônoma, sem necessidade de ligações manuais persistentes.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Como Funciona / Prazo -->
+    <section id="funcionamento" class="py-20 md:py-32 bg-obsidian relative overflow-hidden border-t border-emerald-500/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 md:mb-20 reveal">
+                <span class="text-amber-300 font-extrabold uppercase tracking-[0.4em] text-xs mb-4 block">Processo Eficiente</span>
+                <h2 class="text-4xl md:text-6xl font-black text-white tracking-tighter font-serif">Sua clínica automatizada em <span class="italic text-emerald-400">tempo recorde</span></h2>
+                <p class="text-slate-400 text-sm max-w-xl mx-auto mt-4 leading-relaxed font-semibold">
+                    Simplicidade e rapidez para preparar o seu número, alinhar a linguagem e começar a lucrar.
+                </p>
+            </div>
+
+            <!-- Horizontal / Vertical Steps -->
+            <div class="grid md:grid-cols-3 gap-8 relative">
+                <!-- Connect Line Background for large screens -->
+                <div class="hidden md:block absolute top-1/3 left-[15%] right-[15%] h-0.5 bg-gradient-to-r from-emerald-500/20 via-emerald-500/40 to-emerald-500/20 -z-10"></div>
+
+                <!-- Step 1 -->
+                <div class="glass-card p-8 rounded-3xl relative text-center flex flex-col items-center group reveal" style="transition-delay: 0.1s">
+                    <div class="absolute -top-6 w-12 h-12 rounded-full bg-gradient-to-tr from-emerald-600 to-emerald-400 text-obsidian text-lg font-black flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                        1
+                    </div>
+                    <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-emerald-400 mb-6 mt-2">
+                        <i data-lucide="sliders" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-extrabold text-white mb-3 uppercase tracking-tight">Alinhamento</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Nós entendemos profundamente o tom de voz da sua clínica, as regras e limitações da sua agenda médica e as especialidades de maior lucro.
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="glass-card p-8 rounded-3xl relative text-center flex flex-col items-center group reveal" style="transition-delay: 0.2s">
+                    <div class="absolute -top-6 w-12 h-12 rounded-full bg-gradient-to-tr from-emerald-600 to-emerald-400 text-obsidian text-lg font-black flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                        2
+                    </div>
+                    <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-amber-300 mb-6 mt-2">
+                        <i data-lucide="cpu" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-extrabold text-white mb-1 uppercase tracking-tight">Construção</h3>
+                    <p class="text-[10px] bg-amber-300/10 text-amber-300 px-2 py-0.5 rounded font-black tracking-widest uppercase mb-3 inline-block">Prazo: 10 Dias</p>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Desenvolvemos, refinamos e treinamos a Inteligência Artificial em nossos servidores de alta performance focados especificamente no seu negócio local.
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="glass-card p-8 rounded-3xl relative text-center flex flex-col items-center group reveal" style="transition-delay: 0.3s">
+                    <div class="absolute -top-6 w-12 h-12 rounded-full bg-gradient-to-tr from-emerald-600 to-emerald-400 text-obsidian text-lg font-black flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                        3
+                    </div>
+                    <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-emerald-400 mb-6 mt-2">
+                        <i data-lucide="zap" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-extrabold text-white mb-3 uppercase tracking-tight">Ativação</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Conectamos no seu número de WhatsApp corporativo e pronto! Sem complicações ou atritos. Sua clínica passa a faturar e atender 24h por dia.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Planos e Investimento -->
+    <section id="planos" class="py-20 md:py-32 bg-zinc-950 relative overflow-hidden border-t border-emerald-500/5">
+        <!-- background radial decoration -->
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-emerald-500/5 rounded-full blur-[160px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-16 md:mb-20 reveal">
+                <span class="text-emerald-400 font-extrabold uppercase tracking-[0.4em] text-xs mb-4 block">Decisão Inteligente</span>
+                <h2 class="text-4xl md:text-6xl font-black text-white tracking-tighter font-serif">O investimento que se paga com apenas <br><span class="italic text-amber-300">2 novos procedimentos</span></h2>
+            </div>
+
+            <!-- Two Main Pricing Plans -->
+            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
+                
+                <!-- Plan 1: Implementação Premium -->
+                <div class="glass-card rounded-[2.5rem] p-6 sm:p-8 md:p-12 relative overflow-hidden flex flex-col h-full reveal border-emerald-500/10 hover:border-emerald-500/25 transition-all duration-300" style="transition-delay: 0.1s">
+                    <div class="mb-8">
+                        <div class="flex flex-wrap items-center gap-2 mb-4">
+                            <span class="text-[9px] sm:text-[10px] bg-white/5 text-slate-400 font-black uppercase tracking-wider sm:tracking-widest px-2.5 sm:px-3 py-1.5 rounded-full border border-white/5 break-all max-w-full">Sistema Próprio Dedicado</span>
+                        </div>
+                        <h3 class="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tighter mb-4 uppercase break-words">Plano Implementação Premium</h3>
+                        <p class="text-slate-400 text-sm font-medium leading-relaxed">Para clínicas estéticas que querem o sistema inteiramente próprio e definitivo.</p>
+                    </div>
+
+                    <div class="mb-8 space-y-3 pb-8 border-b border-white/5">
+                        <div class="flex flex-wrap items-baseline gap-2">
+                            <span class="text-xs text-slate-400 uppercase tracking-wider sm:tracking-widest font-black">Desenvolvimento Único:</span>
+                            <span class="text-3xl sm:text-4xl font-black text-white">R$ 3.200,00</span>
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-x-4 text-xs text-slate-400 font-semibold">
+                            <span class="flex items-center gap-1.5">Nuvem: <strong>~R$ 79,90/mês</strong></span>
+                            <span class="flex items-center gap-1.5">API: <strong>R$ 200,00 inicial</strong> (dura 3-4 meses)</span>
+                        </div>
+                        <p class="text-[9px] sm:text-[10px] text-amber-300 font-black uppercase tracking-wider sm:tracking-widest pt-2">Ideal para quem quer o controle total da ferramenta.</p>
+                    </div>
+
+                    <div class="space-y-4 mb-8 flex-grow">
+                        <div class="flex items-start gap-4">
+                            <i data-lucide="check" class="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0"></i>
+                            <span class="text-slate-300 text-sm font-medium">Linguagem e Tom de voz 100% personalizados</span>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <i data-lucide="check" class="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0"></i>
+                            <span class="text-slate-300 text-sm font-medium">Sincronização profunda com a sua agenda médica</span>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <i data-lucide="check" class="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0"></i>
+                            <span class="text-slate-300 text-sm font-medium">Treinamento de áudio com a sua voz ou da clínica</span>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <i data-lucide="check" class="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0"></i>
+                            <span class="text-slate-300 text-sm font-medium">Acesso total ao código e infraestrutura na nuvem</span>
+                        </div>
+                    </div>
+
+                    <div onclick="openLinkBuilderModal('Implementação Premium')" class="neon-glow-btn group w-full">
+                        <div class="neon-glow-btn-shadow"></div>
+                        <div class="neon-sweep"></div>
+                        <div class="neon-glow-btn-inner px-6 sm:px-8 py-4 text-[10px] sm:text-xs font-extrabold uppercase tracking-widest flex items-center justify-center gap-3">
+                            <span>Quero o Plano Sistema Próprio</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-emerald-400 group-hover:text-amber-300"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plan 2: Plano Assinatura Mensal (Highlighted) -->
+                <div class="glass-card rounded-[2.5rem] p-6 sm:p-8 md:p-12 relative overflow-hidden flex flex-col h-full border-emerald-500/40 shadow-[0_0_50px_rgba(16,185,129,0.15)] reveal hover:shadow-[0_0_60px_rgba(16,185,129,0.2)] transition-all duration-300" style="transition-delay: 0.2s">
+                    <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-500 via-emerald-400 to-amber-300"></div>
+                    
+                    <div class="mb-8">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                            <span class="text-[9px] sm:text-[10px] bg-emerald-500/20 text-emerald-300 font-extrabold uppercase tracking-wider sm:tracking-widest px-2.5 sm:px-3 py-1.5 rounded-full border border-emerald-500/20 self-start break-all max-w-full">Plano Assinatura Mensal</span>
+                            <span class="text-[9px] bg-amber-400 text-obsidian font-black uppercase tracking-[0.2em] px-2.5 py-1 rounded-full self-start">Mais Vendido</span>
+                        </div>
+                        <h3 class="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tighter mb-4 uppercase break-words">Plano Assinatura Mensal</h3>
+                        <p class="text-slate-400 text-sm font-medium leading-relaxed">Para quem busca previsibilidade, menor custo inicial e suporte total incluso.</p>
+                    </div>
+
+                    <div class="mb-8 pb-8 border-b border-white/5 space-y-1">
+                        <p class="text-[9px] sm:text-[10px] text-emerald-400 font-black uppercase tracking-wider sm:tracking-widest leading-normal">Sem taxa de implementação (Economia de R$ 3.200)</p>
+                        <div class="flex flex-wrap items-baseline gap-2">
+                            <span class="text-xs text-slate-400 uppercase tracking-wider sm:tracking-widest font-black">Mensalidade:</span>
+                            <span class="text-3xl sm:text-4xl md:text-5xl font-black text-emerald-400 tracking-tighter">R$ 289,90</span>
+                            <span class="text-[10px] text-slate-500 uppercase font-black">/ mês</span>
+                        </div>
+                        <p class="text-[9px] text-slate-500 leading-normal">*Créditos de IA cobrados à parte conforme o consumo real do WhatsApp.</p>
+                    </div>
+
+                    <div class="space-y-4 mb-8 flex-grow">
+                        <div class="flex items-start gap-4">
+                            <i data-lucide="check" class="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0"></i>
+                            <span class="text-slate-300 text-sm font-bold">Servidor de alta performance já incluso</span>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <i data-lucide="check" class="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0"></i>
+                            <span class="text-slate-300 text-sm font-medium">Suporte técnico especializado 100% incluso</span>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <i data-lucide="check" class="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0"></i>
+                            <span class="text-slate-300 text-sm font-medium">Atualizações periódicas do modelo de IA gratuitas</span>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <i data-lucide="check" class="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0"></i>
+                            <span class="text-slate-300 text-sm font-medium">Hospedagem segura e blindagem de número inclusas</span>
+                        </div>
+                    </div>
+
+                    <div onclick="openLinkBuilderModal('Assinatura Mensal')" class="neon-glow-btn group w-full">
+                        <div class="neon-glow-btn-shadow"></div>
+                        <div class="neon-sweep"></div>
+                        <div class="neon-glow-btn-inner px-6 sm:px-8 py-4 text-[10px] sm:text-xs font-extrabold uppercase tracking-widest flex items-center justify-center gap-3">
+                            <span>Quero o Plano Assinatura Mensal</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-emerald-400 group-hover:text-amber-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guarantee Box -->
+            <div class="mt-16 flex flex-col md:flex-row items-center gap-8 text-left glass-card p-8 md:p-10 rounded-[2.5rem] max-w-5xl mx-auto reveal">
+                <div class="w-20 h-20 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-xl shadow-emerald-500/10">
+                    <i data-lucide="shield-check" class="text-emerald-400 w-10 h-10"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-extrabold text-white mb-2 uppercase tracking-tight">Compromisso e Qualidade</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Entendemos a relevância das conversas com seus pacientes. Oferecemos suporte completo no ajuste da linguagem nos primeiros dias, garantindo que a IA reproduza fielmente os padrões de ética e acolhimento exigidos pela sua especialidade.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6: Perguntas Frequentes (FAQ) -->
+    <section id="faq" class="py-20 md:py-32 bg-obsidian relative overflow-hidden border-t border-emerald-500/5">
+        <div class="max-w-4xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-16 md:mb-20 reveal">
+                <span class="text-amber-300 font-extrabold uppercase tracking-[0.4em] text-xs mb-4 block">Esclarecimentos</span>
+                <h2 class="text-4xl md:text-5xl font-black text-white tracking-tighter font-serif">Perguntas Frequentes</h2>
+                <p class="text-slate-400 text-sm mt-3 font-semibold">Tire suas dúvidas antes de dar o próximo passo rumo ao atendimento 10x.</p>
+            </div>
+
+            <!-- FAQ Accordions -->
+            <div class="space-y-4">
+                <!-- FAQ 1 -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-white/5 reveal" style="transition-delay: 0.1s">
+                    <button class="faq-toggle w-full px-6 py-5 text-left flex items-center justify-between text-white font-bold text-sm tracking-wide md:text-base hover:bg-emerald-500/5 transition-colors focus:outline-none">
+                        <span>Meu número corre risco de ser banido?</span>
+                        <div class="w-8 h-8 rounded-lg faq-icon-container flex items-center justify-center text-slate-400">
+                            <div class="relative w-3.5 h-3.5 flex items-center justify-center text-current">
+                                <span class="absolute w-3.5 h-[1.5px] bg-current rounded-full"></span>
+                                <span class="absolute w-[1.5px] h-3.5 bg-current rounded-full faq-line-v"></span>
+                            </div>
+                        </div>
+                    </button>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-zinc-950/20">
+                        <div class="p-6 text-slate-400 text-xs md:text-sm leading-relaxed border-t border-white/5">
+                            Não. Utilizamos integrações robustas e treinamos a Inteligência Artificial para simular o comportamento de uma secretária humana real, respeitando rigorosamente os limites de envio e tempo de digitação para garantir total segurança e integridade do seu número comercial.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-white/5 reveal" style="transition-delay: 0.2s">
+                    <button class="faq-toggle w-full px-6 py-5 text-left flex items-center justify-between text-white font-bold text-sm tracking-wide md:text-base hover:bg-emerald-500/5 transition-colors focus:outline-none">
+                        <span>Eu preciso deixar o meu computador ligado?</span>
+                        <div class="w-8 h-8 rounded-lg faq-icon-container flex items-center justify-center text-slate-400">
+                            <div class="relative w-3.5 h-3.5 flex items-center justify-center text-current">
+                                <span class="absolute w-3.5 h-[1.5px] bg-current rounded-full"></span>
+                                <span class="absolute w-[1.5px] h-3.5 bg-current rounded-full faq-line-v"></span>
+                            </div>
+                        </div>
+                    </button>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-zinc-950/20">
+                        <div class="p-6 text-slate-400 text-xs md:text-sm leading-relaxed border-t border-white/5">
+                            Não! Tudo roda 100% online em nossos servidores baseados na nuvem. O sistema executa todos os atendimentos mesmo se o seu celular estiver desligado, sem carregador ou completamente sem sinal de internet.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 7: Rodapé / CTA Final -->
+    <section class="py-20 md:py-32 bg-[#050906] relative overflow-hidden border-t border-emerald-500/10">
+        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent"></div>
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10 space-y-10 reveal">
+            
+            <div class="w-16 h-16 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-3xl flex items-center justify-center mx-auto shadow-2xl">
+                <i data-lucide="message-square" class="w-8 h-8 text-emerald-400"></i>
+            </div>
+
+            <!-- Frase Final -->
+            <h2 class="text-3xl md:text-5xl font-black text-white tracking-tighter leading-tight font-serif">
+                Não deixe mais dinheiro na mesa. Garanta a automação da sua clínica antes que o seu concorrente direto faça primeiro.
+            </h2>
+
+            <p class="text-slate-400 text-base max-w-xl mx-auto font-medium">
+                Sua equipe focada no atendimento presencial VIP e o seu WhatsApp lotando a sua agenda médica sem parar de forma automática.
+            </p>
+
+            <div onclick="document.getElementById('planos').scrollIntoView({ behavior: 'smooth' })" class="neon-glow-btn group w-full sm:w-auto cursor-pointer">
+                <div class="neon-glow-btn-shadow"></div>
+                <div class="neon-sweep"></div>
+                <div class="neon-glow-btn-inner px-10 py-5 text-base font-extrabold uppercase tracking-widest flex items-center justify-center gap-3 min-w-[320px]">
+                    <span>Quero Modernizar Meu Atendimento</span>
+                    <i data-lucide="arrow-right" class="w-5 h-5 text-emerald-400 group-hover:text-amber-300"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real Footer -->
+    <footer class="py-12 bg-black border-t border-white/5 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8 mb-12">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/10">
+                        <i data-lucide="message-square" class="text-white w-4.5 h-4.5"></i>
+                    </div>
+                    <span class="text-base font-black tracking-tighter text-white uppercase">Automação 10x<span class="text-emerald-500">™</span></span>
+                </div>
+                
+                <div class="flex gap-8">
+                    <a href="#" class="text-slate-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors">Termos de Uso</a>
+                    <a href="#" class="text-slate-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors">Política de Privacidade</a>
+                    <a href="#" class="text-slate-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors">Suporte</a>
+                </div>
+            </div>
+            
+            <div class="text-center text-slate-700 text-[9px] font-bold uppercase tracking-[0.4em]">
+                <p>Copyright 2026 © Automação 10x. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <!-- INTERACTIVE PROPOSAL MODAL & WHATSAPP LINK BUILDER -->
+    <div id="proposal-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] hidden items-center justify-center p-4 transition-opacity duration-300">
+        <div class="glass-card rounded-[2rem] border-emerald-500/30 w-full max-w-sm md:max-w-md p-6 md:p-8 relative glow-emerald">
+            <!-- Close button -->
+            <button onclick="closeProposalModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+
+            <!-- Modal header -->
+            <div class="text-center mb-6 space-y-2">
+                <h3 class="text-xl font-extrabold text-white uppercase tracking-tight">Modernizar Meu Atendimento</h3>
+                <p class="text-[11px] text-slate-400">Crie o seu link e fale direto conosco no WhatsApp para alinhar a sua clínica.</p>
+            </div>
+
+            <!-- Form -->
+            <form id="proposal-form" onsubmit="triggerWhatsappRedirect(event)" class="space-y-4">
+                <div class="space-y-1 text-left">
+                    <label for="form-name" class="text-[9.5px] text-slate-400 font-extrabold uppercase tracking-wider">O Seu Nome / Profissional</label>
+                    <input id="form-name" type="text" required placeholder="Ex: Dra. Mariana Vasconcelos" class="w-full bg-zinc-950 border border-white/10 focus:border-emerald-500 rounded-xl px-4 py-3 text-xs text-white placeholder-slate-600 focus:outline-none transition-all">
+                </div>
+
+                <div class="space-y-1 text-left">
+                    <label for="form-clinic" class="text-[9.5px] text-slate-400 font-extrabold uppercase tracking-wider">Nome da Sua Clínica</label>
+                    <input id="form-clinic" type="text" required placeholder="Ex: Essenza Clínica e Spa" class="w-full bg-zinc-950 border border-white/10 focus:border-emerald-500 rounded-xl px-4 py-3 text-xs text-white placeholder-slate-600 focus:outline-none transition-all">
+                </div>
+
+                <div class="space-y-1 text-left">
+                    <label for="form-plan" class="text-[9.5px] text-slate-400 font-extrabold uppercase tracking-wider">Plano de Interesse</label>
+                    <select id="form-plan" class="w-full bg-zinc-950 border border-white/10 focus:border-emerald-500 rounded-xl px-4 py-3 text-xs text-slate-300 focus:outline-none transition-all">
+                        <option value="Assinatura Mensal">Plano Assinatura Mensal (Mais Vendido) - R$ 289,90/mês</option>
+                        <option value="Implementação Premium">Plano Implementação Premium - Sistema Próprio</option>
+                        <option value="Ainda analisando">Quero tirar dúvidas primeiro</option>
+                    </select>
+                </div>
+
+                <!-- Live link preview indicator -->
+                <div class="bg-zinc-950/80 p-3.5 rounded-xl border border-white/5 text-[10px] text-left text-emerald-400/80 space-y-1 italic select-none">
+                    <span class="font-extrabold block not-italic uppercase tracking-widest text-[8px] text-slate-500 mb-0.5">Mensagem que será gerada:</span>
+                    "Olá! Me chamo <span id="preview-name" class="font-bold underline text-white">Mariana</span>, da clínica <span id="preview-clinic" class="font-bold underline text-white">Essenza</span>, e quero saber mais sobre o plano de <span id="preview-plan" class="font-bold text-white">Assinatura Mensal</span> da Secretária Digital!"
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="neon-glow-btn group w-full text-left">
+                    <span class="neon-glow-btn-shadow"></span>
+                    <span class="neon-sweep"></span>
+                    <span class="neon-glow-btn-inner px-6 sm:px-8 py-4 text-[10px] sm:text-xs font-extrabold uppercase tracking-widest flex items-center justify-center gap-2">
+                        <span>Enviar Proposta para o WhatsApp</span>
+                        <i data-lucide="message-square" class="w-4 h-4 text-emerald-400 group-hover:text-amber-300"></i>
+                    </span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN JAVASCRIPT REGISTRY -->
+    <script>
+        // Initialize Lucide Icons
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+
+        // Live calculations inside Simulator
+        const lostSlider = document.getElementById('lost-slider');
+        const ticketSlider = document.getElementById('ticket-slider');
+        const lostLabel = document.getElementById('lost-val-label');
+        const ticketLabel = document.getElementById('ticket-val-label');
+        const lossResult = document.getElementById('loss-result');
+
+        function updateLossCalculator() {
+            const lostVal = parseInt(lostSlider.value, 10);
+            const ticketVal = parseInt(ticketSlider.value, 10);
+            
+            lostLabel.textContent = `${lostVal} ${lostVal === 1 ? 'perdido' : 'perdidos'} / mês`;
+            ticketLabel.textContent = `R$ ${ticketVal.toLocaleString('pt-BR')}`;
+            
+            const totalLoss = lostVal * ticketVal;
+            lossResult.textContent = `R$ ${totalLoss.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+
+        if (lostSlider && ticketSlider) {
+            lostSlider.addEventListener('input', updateLossCalculator);
+            ticketSlider.addEventListener('input', updateLossCalculator);
+            updateLossCalculator();
+        }
+
+        // Live text preview in Proposal Modal
+        const formName = document.getElementById('form-name');
+        const formClinic = document.getElementById('form-clinic');
+        const formPlan = document.getElementById('form-plan');
+        const previewName = document.getElementById('preview-name');
+        const previewClinic = document.getElementById('preview-clinic');
+        const previewPlan = document.getElementById('preview-plan');
+
+        function updateProposalPreview() {
+            previewName.textContent = formName.value.trim() || 'Mariana';
+            previewClinic.textContent = formClinic.value.trim() || 'Essenza';
+            previewPlan.textContent = formPlan.value;
+        }
+
+        if (formName && formClinic && formPlan) {
+            formName.addEventListener('input', updateProposalPreview);
+            formClinic.addEventListener('input', updateProposalPreview);
+            formPlan.addEventListener('change', updateProposalPreview);
+        }
+
+        // Modal triggers
+        const proposalModal = document.getElementById('proposal-modal');
+
+        function openProposalModal() {
+            proposalModal.classList.remove('hidden');
+            proposalModal.classList.add('flex');
+            setTimeout(() => {
+                proposalModal.style.opacity = '1';
+            }, 50);
+        }
+
+        function openLinkBuilderModal(selectedPlan) {
+            if (formPlan) {
+                // Set selective index
+                for (let i = 0; i < formPlan.options.length; i++) {
+                    if (formPlan.options[i].value.includes(selectedPlan)) {
+                        formPlan.selectedIndex = i;
+                        break;
+                    }
+                }
+                updateProposalPreview();
+            }
+            openProposalModal();
+        }
+
+        function closeProposalModal() {
+            proposalModal.style.opacity = '0';
+            setTimeout(() => {
+                proposalModal.classList.add('hidden');
+                proposalModal.classList.remove('flex');
+            }, 300);
+        }
+
+        // Close modal on click outside form child
+        if (proposalModal) {
+            proposalModal.addEventListener('click', (e) => {
+                if (e.target === proposalModal) {
+                    closeProposalModal();
+                }
+            });
+        }
+
+        // Build and trigger the WhatsApp Link
+        function triggerWhatsappRedirect(event) {
+            event.preventDefault();
+            const name = formName.value.trim() || 'Dono de Clínica';
+            const clinic = formClinic.value.trim() || 'Clínica de Estética';
+            const plan = formPlan.value;
+
+            const baseMsg = `Olá! Me chamo ${name}, da clínica ${clinic}, e quero saber mais sobre o plano de ${plan} da Secretária Digital!`;
+            const encodedMsg = encodeURIComponent(baseMsg);
+            
+            // Build the wa.me redirection
+            const waUrl = `https://wa.me/5567992154634?text=${encodedMsg}`; // Custom business line
+            
+            // Redirect safely
+            window.open(waUrl, '_blank');
+            closeProposalModal();
+        }
+
+        // Mouse Glow Effect
+        const mouseGlow = document.getElementById('mouse-glow');
+        if (mouseGlow) {
+            document.addEventListener('mousemove', (e) => {
+                mouseGlow.style.background = `radial-gradient(600px circle at ${e.clientX}px ${e.clientY}px, rgba(16, 185, 129, 0.05), transparent 80%)`;
+            });
+        }
+
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        const scrollProgress = document.getElementById('scroll-progress');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                if (navbar) {
+                    navbar.classList.add('bg-obsidian/85', 'backdrop-blur-xl', 'border-b', 'border-emerald-500/10');
+                    navbar.classList.remove('py-6');
+                    navbar.classList.add('py-3.5');
+                }
+            } else {
+                if (navbar) {
+                    navbar.classList.remove('bg-obsidian/85', 'backdrop-blur-xl', 'border-b', 'border-emerald-500/10');
+                    navbar.classList.add('py-6');
+                    navbar.classList.remove('py-3.5');
+                }
+            }
+
+            // Scroll Progress
+            if (scrollProgress) {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                scrollProgress.style.width = scrolled + "%";
+            }
+        });
+
+        // Mobile Menu Toggle with Sleek Slide Down and Icon Swap
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                const isHidden = mobileMenu.classList.contains('hidden');
+                if (isHidden) {
+                    mobileMenu.classList.remove('hidden');
+                    mobileMenu.style.maxHeight = '0px';
+                    mobileMenu.style.opacity = '0';
+                    mobileMenu.offsetHeight; // force reflow
+                    mobileMenu.style.transition = 'max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease';
+                    mobileMenu.style.maxHeight = '500px';
+                    mobileMenu.style.opacity = '1';
+                    menuBtn.innerHTML = '<i data-lucide="x"></i>';
+                } else {
+                    mobileMenu.style.transition = 'max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease';
+                    mobileMenu.style.maxHeight = '0px';
+                    mobileMenu.style.opacity = '0';
+                    setTimeout(() => {
+                        mobileMenu.classList.add('hidden');
+                    }, 300);
+                    menuBtn.innerHTML = '<i data-lucide="menu"></i>';
+                }
+                if (window.lucide) {
+                    lucide.createIcons();
+                }
+            });
+        }
+
+        // Close menu on link click
+        document.querySelectorAll('.menu-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.style.transition = 'max-height 0.3s ease, opacity 0.2s ease';
+                    mobileMenu.style.maxHeight = '0px';
+                    mobileMenu.style.opacity = '0';
+                    setTimeout(() => {
+                        mobileMenu.classList.add('hidden');
+                    }, 300);
+                    if (menuBtn) {
+                        menuBtn.innerHTML = '<i data-lucide="menu"></i>';
+                    }
+                    if (window.lucide) {
+                        lucide.createIcons();
+                    }
+                }
+            });
+        });
+
+        // ========================================================
+        // HIGH-FIDELITY CHAT SIMULATOR (AUTOPLAYING MULTIPLE SCENARIOS)
+        // ========================================================
+        const chatBox = document.getElementById('simulated-chat-box');
+        const chatInputStatus = document.getElementById('chat-input-status');
+
+        const simulationFlows = [
+            {
+                dialogueTitle: "Caso: Botox Estético",
+                messages: [
+                    { sender: 'bot', text: 'Olá, seja muito bem-vinda à clínica! Como posso te ajudar hoje? Deseja agendar sua consulta de Botox ou saber mais sobre nossos tratamentos?' },
+                    { sender: 'user', text: 'Olá! Gostaria de saber os horários disponíveis para fazer Botox essa semana no final do dia.' },
+                    { sender: 'bot', text: 'Perfeito! Nosso sistema localizou os seguintes horários livres para procedimentos estéticos no final do dia:<br><br><span class="font-extrabold text-amber-300">Quinta-feira às 17h30<br>Sexta-feira às 18h00</span><br><br>Qual deles fica melhor para você?' },
+                    { sender: 'user-audio', transcript: 'Ah, pode marcar Quinta às 17h30 por favor!', duration: '0:06' },
+                    { sender: 'bot', text: 'Excelente! Reservado no sistema com confirmação imediata. Já bloqueei a vaga na agenda médica!<br><br><div class="bg-zinc-950 p-3 rounded-xl border border-emerald-500/15 text-left font-black text-slate-100 text-[11px] leading-relaxed"><span class="text-emerald-400">Procedimento:</span> Botox Estético Premium<br><span class="text-emerald-400">Horário:</span> Quinta-feira às 17:30<br><span class="text-emerald-400">Status:</span> Confirmado no Sistema!</div>' }
+                ]
+            },
+            {
+                dialogueTitle: "Caso: Preenchimento Labial",
+                messages: [
+                    { sender: 'bot', text: 'Olá! Bem-vinda à rede Estética Premium. Desejaria agendar um preenchimento com ácido hialurônico ou harmonização facial?' },
+                    { sender: 'user', text: 'Oi! Dá pra fazer preenchimento labial com vocês no Sábado pela manhã?' },
+                    { sender: 'bot', text: 'Temos sim! Nossa médica especialista tem duas brechas exclusivas para este Sábado pela manhã:<br><br><span class="font-bold text-amber-300">Sábado às 09h00<br>Sábado às 11h15</span><br><br>Qual dessas você prefere reservar?' },
+                    { sender: 'user', text: 'Pode ser o das 09h00! Meu nome é Luciana Antunes.' },
+                    { sender: 'bot', text: 'Maravilha, Luciana! Horário registrado com sucesso. Seu link de preparação de pele pré-procedimento foi emitido!<br><br><div class="bg-zinc-950 p-3 rounded-xl border border-emerald-500/15 text-left font-black text-slate-100 text-[11px] leading-relaxed"><span class="text-emerald-400">Procedimento:</span> Preenchimento Labial<br><span class="text-emerald-400">Horário:</span> Sábado às 09:00<br><span class="text-emerald-400">Paciente:</span> Luciana Antunes (Confirmado)</div>' }
+                ]
+            },
+            {
+                dialogueTitle: "Caso: Retoque 30 Dias (Fidelização)",
+                messages: [
+                    { sender: 'bot', text: 'Olá, Mariana! Passando para lembrar que já se passaram 4 meses desde a sua última aplicação de Botox na testa e olhos. Deseja garantir seu retoque para manter a pele 100% lisinha?' },
+                    { sender: 'user', text: 'Nossa, verdade! Já estou começando a ver as linhas marcando quando sorrio. Tem vaga para amanhã à tarde?' },
+                    { sender: 'bot', text: 'Com certeza! Localizei uma brecha amanhã às 14h30 ou às 16h00. Algum desses horários fica bom para você?' },
+                    { sender: 'user-audio', transcript: 'Pode ser amanhã às 16:00 por favor!', duration: '0:04' },
+                    { sender: 'bot', text: 'Perfeito! Agendamento reativado e garantido na agenda. Até amanhã às 16:00!' }
+                ]
+            }
+        ];
+
+        let activeFlowIdx = 0;
+        let activeMsgIdx = 0;
+        let activeTimer = null;
+
+        function runChatCycle() {
+            if (!chatBox) return;
+
+            const flow = simulationFlows[activeFlowIdx];
+            
+            // Check if flow finished
+            if (activeMsgIdx >= flow.messages.length) {
+                if (chatInputStatus) chatInputStatus.textContent = 'Novas solicitações online...';
+                activeTimer = setTimeout(() => {
+                    // Reset and advance
+                    chatBox.innerHTML = `
+                        <div class="text-center message-fade-in my-4">
+                            <span class="bg-zinc-900 border border-white/5 text-slate-400 text-[9.5px] font-black tracking-widest uppercase px-3 py-1.5 rounded-lg">
+                                🔄 Próxima Simulação: ${simulationFlows[(activeFlowIdx + 1) % simulationFlows.length].dialogueTitle}
+                            </span>
+                        </div>`;
+                    activeFlowIdx = (activeFlowIdx + 1) % simulationFlows.length;
+                    activeMsgIdx = 0;
+                    runChatCycle();
+                }, 4500); // Wait 4.5s on finished cycle
+                return;
+            }
+
+            const msg = flow.messages[activeMsgIdx];
+            
+            if (msg.sender === 'bot') {
+                if (chatInputStatus) {
+                    chatInputStatus.innerHTML = `Secretária Inteligente digitando<span class="inline-flex gap-0.5 ml-1"><span class="w-1 h-1 bg-emerald-400 rounded-full animate-bounce"></span><span class="w-1 h-1 bg-emerald-400 rounded-full animate-bounce" style="animation-delay:0.15s"></span><span class="w-1 h-1 bg-emerald-400 rounded-full animate-bounce" style="animation-delay:0.3s"></span></span>`;
+                }
+                
+                // Bot typing duration proportional to message size
+                const typingTime = Math.min(Math.max(msg.text.length * 15, 1200), 2200);
+                activeTimer = setTimeout(() => {
+                    insertChatMessage('bot', msg);
+                    if (chatInputStatus) chatInputStatus.textContent = 'Secretária Digital online';
+                    activeMsgIdx++;
+                    // Wait before user responds
+                    activeTimer = setTimeout(runChatCycle, 1600);
+                }, typingTime);
+            } else {
+                if (chatInputStatus) {
+                    chatInputStatus.textContent = 'Paciente digitando residência...';
+                }
+                activeTimer = setTimeout(() => {
+                    insertChatMessage(msg.sender, msg);
+                    if (chatInputStatus) chatInputStatus.textContent = 'Secretária Digital online';
+                    activeMsgIdx++;
+                    // Wait before bot responds
+                    activeTimer = setTimeout(runChatCycle, 1200);
+                }, 1500);
+            }
+        }
+
+        function insertChatMessage(sender, data) {
+            let chunk = '';
+            
+            if (sender === 'bot') {
+                chunk = `
+                <div class="flex items-start gap-2.5 max-w-[85%] message-fade-in">
+                    <div class="w-6 h-6 rounded-full bg-emerald-950 border border-emerald-500/30 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="bot" class="w-3.5 h-3.5 text-emerald-400"></i>
+                    </div>
+                    <div class="bg-zinc-900 border border-white/5 rounded-2xl rounded-tl-none p-3 text-slate-200">
+                        ${data.text}
+                    </div>
+                </div>`;
+            } else if (sender === 'user') {
+                chunk = `
+                <div class="flex items-start gap-2.5 max-w-[85%] ml-auto justify-end message-fade-in">
+                    <div class="bg-emerald-950/40 border border-emerald-500/10 rounded-2xl rounded-tr-none p-3 text-slate-100">
+                        ${data.text}
+                    </div>
+                </div>`;
+            } else if (sender === 'user-audio') {
+                chunk = `
+                <div class="flex items-start gap-2.5 max-w-[85%] ml-auto justify-end message-fade-in w-full">
+                    <div class="bg-emerald-950/40 border border-emerald-500/10 rounded-2xl rounded-tr-none p-3 text-slate-100 w-full">
+                        <div class="flex items-center gap-3">
+                            <button class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                                <i data-lucide="play" class="w-3.5 h-3.5 fill-emerald-400"></i>
+                            </button>
+                            <div class="flex-grow">
+                                <div class="flex items-end gap-0.5 h-4">
+                                    <div class="w-0.5 bg-emerald-400 rounded-full h-[30%]"></div>
+                                    <div class="w-0.5 bg-emerald-400 rounded-full h-[60%]"></div>
+                                    <div class="w-0.5 bg-emerald-400 rounded-full h-[80%]"></div>
+                                    <div class="w-0.5 bg-emerald-400 rounded-full h-[40%]"></div>
+                                    <div class="w-0.5 bg-emerald-400 rounded-full h-[90%]"></div>
+                                    <div class="w-0.5 bg-emerald-500 rounded-full h-[50%]"></div>
+                                    <div class="w-0.5 bg-emerald-500 rounded-full h-[70%]"></div>
+                                    <div class="w-0.5 bg-emerald-500 rounded-full h-[30%]"></div>
+                                    <div class="w-0.5 bg-emerald-500 rounded-full h-[85%]"></div>
+                                    <div class="w-0.5 bg-emerald-500 rounded-full h-[15%]"></div>
+                                </div>
+                            </div>
+                            <span class="text-[9px] text-emerald-400/60 font-bold">${data.duration}</span>
+                        </div>
+                        <div class="text-[9.5px] italic text-emerald-400/80 mt-2 border-t border-emerald-500/10 pt-1 flex items-center gap-1.5">
+                            <i data-lucide="mic" class="w-2.5 h-2.5"></i>
+                            <span>Áudio Transcrito: "${data.transcript}"</span>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            chatBox.insertAdjacentHTML('beforeend', chunk);
+            if (window.lucide) {
+                try {
+                lucide.createIcons();
+                } catch(e) {}
+            }
+            
+            // Smoth scroll to bottom
+            chatBox.scrollTo({
+                top: chatBox.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        // Initialize Chat Simulation on Page load
+        if (chatBox) {
+            chatBox.innerHTML = `
+                <div class="text-center my-2">
+                    <span class="bg-zinc-900 border border-white/5 text-slate-500 text-[8.5px] font-black tracking-widest uppercase px-2 py-1 rounded-md">Hoje • Clique para Testar Online</span>
+                </div>`;
+            setTimeout(runChatCycle, 800);
+        }
+
+        // Matrix / Synaptic Glow Effect in canvas
+        const canvases = document.querySelectorAll('.matrix-canvas');
+        const matrixData = [];
+
+        function initMatrix(canvas) {
+            const ctx = canvas.getContext('2d');
+            const fontSize = 14;
+            let columns = Math.ceil(canvas.width / fontSize);
+            let drops = Array(columns).fill(0).map(() => Math.random() * -100);
+            return { canvas, ctx, fontSize, columns, drops };
+        }
+
+        function resizeCanvases() {
+            canvases.forEach((canvas, index) => {
+                canvas.width = canvas.parentElement.offsetWidth;
+                canvas.height = canvas.parentElement.offsetHeight;
+                matrixData[index] = initMatrix(canvas);
+            });
+        }
+
+        canvases.forEach((canvas, index) => {
+            matrixData[index] = initMatrix(canvas);
+        });
+
+        resizeCanvases();
+        window.addEventListener('resize', resizeCanvases);
+
+        // Binary WhatsApp style numbers 0 & 1 and dots
+        const chars = "01•*+";
+
+        function drawMatrix() {
+            matrixData.forEach(data => {
+                const { ctx, canvas, fontSize, drops } = data;
+                
+                ctx.fillStyle = "rgba(5, 8, 6, 0.12)"; // Blend back to Obsidian
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Elegant faint emerald shade for numbers
+                ctx.fillStyle = "rgba(16, 185, 129, 0.15)";
+                ctx.font = `normal ${fontSize}px monospace`;
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            });
+        }
+        setInterval(drawMatrix, 35);
+
+        // Reveal on Scroll
+        const observerOptions = {
+            threshold: 0.10,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // FAQ Accoridon Action
+        const faqToggles = document.querySelectorAll('.faq-toggle');
+        faqToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const content = toggle.nextElementSibling;
+                const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+
+                // Close all other FAQ entries
+                faqToggles.forEach(otherToggle => {
+                    if (otherToggle !== toggle) {
+                        const otherContent = otherToggle.nextElementSibling;
+                        otherContent.style.maxHeight = '0px';
+                        otherToggle.classList.remove('faq-open');
+                    }
+                });
+
+                // Toggle this entry
+                if (isOpen) {
+                    content.style.maxHeight = '0px';
+                    toggle.classList.remove('faq-open');
+                } else {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                    toggle.classList.add('faq-open');
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

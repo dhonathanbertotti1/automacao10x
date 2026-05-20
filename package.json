@@ -1,0 +1,14 @@
+{
+  "name": "react-example",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "mkdir -p dist && cp index.html dist/",
+    "dev": "npx serve . -p 3000",
+    "start": "npx serve dist -p 3000",
+    "lint": "echo 'No lint check required'"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
