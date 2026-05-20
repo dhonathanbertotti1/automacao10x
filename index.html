@@ -2,7 +2,7 @@
 <html lang="pt-BR" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Automação 10x | Inteligência Artificial para Clínicas de Estética</title>
     <meta name="description" content="Automatize o WhatsApp da sua clínica de estética 24/7. Agende Botox e procedimentos estéticos automaticamente com Inteligência Artificial avançada.">
     
@@ -61,6 +61,14 @@
         @layer base {
             body {
                 @apply bg-obsidian text-slate-100 antialiased selection:bg-emerald-500/20 selection:text-emerald-300;
+            }
+            input, select, textarea {
+                font-size: 16px !important;
+            }
+            @media (min-width: 768px) {
+                input, select, textarea {
+                    font-size: 12px !important;
+                }
             }
         }
         @layer utilities {
