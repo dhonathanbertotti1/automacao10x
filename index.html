@@ -314,7 +314,7 @@
         <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
             <div class="flex items-center gap-3 group cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
                 <div class="w-10 h-10 bg-gradient-to-tr from-emerald-600 to-emerald-400 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:rotate-6 transition-all duration-300">
-                    <i data-lucide="bot" class="text-white w-5 h-5"></i>
+                    <i data-lucide="sparkles" class="text-white w-5 h-5"></i>
                 </div>
                 <div class="flex flex-col">
                     <span class="text-lg font-extrabold tracking-tighter text-white uppercase leading-none">Automação 10x<span class="text-emerald-400">™</span></span>
@@ -383,7 +383,7 @@
             <div class="neon-ambient-amber bottom-[10%] right-[5%] w-[500px] h-[500px]"></div>
         </div>
 
-        <canvas class="matrix-canvas absolute inset-0 w-full h-full pointer-events-none opacity-20 z-[1]"></canvas>
+        <canvas class="matrix-canvas absolute inset-0 w-full h-full pointer-events-none opacity-75 z-[1]"></canvas>
 
         <div class="max-w-7xl mx-auto px-6 relative z-10 w-full">
             <div class="grid lg:grid-cols-12 gap-12 items-center">
@@ -458,7 +458,7 @@
                     <div class="absolute -right-4 bottom-12 z-20 animate-float scale-90 sm:scale-100 hidden sm:block" style="animation-duration: 4s; animation-delay: 1.5s">
                         <div class="glass-card px-5 py-3 rounded-2xl flex items-center gap-3 shadow-2xl border-amber-500/10">
                             <div class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-300">
-                                <i data-lucide="sparkles" class="w-4.5 h-4.5"></i>
+                                <i data-lucide="gem" class="w-4.5 h-4.5"></i>
                             </div>
                             <div class="text-left">
                                 <p class="text-[9px] text-amber-300 font-bold uppercase tracking-widest">Especialidade</p>
@@ -1544,21 +1544,31 @@
         window.addEventListener('resize', resizeCanvases);
 
         // Binary WhatsApp style numbers 0 & 1 and dots
-        const chars = "01•*+";
+        const chars = "01•*+<>[]{}%$#";
 
         function drawMatrix() {
             matrixData.forEach(data => {
                 const { ctx, canvas, fontSize, drops } = data;
                 
-                ctx.fillStyle = "rgba(5, 8, 6, 0.12)"; // Blend back to Obsidian
+                // Keep trails smoother with a 0.08 fade
+                ctx.fillStyle = "rgba(5, 8, 6, 0.08)";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                // Elegant faint emerald shade for numbers
-                ctx.fillStyle = "rgba(16, 185, 129, 0.15)";
-                ctx.font = `normal ${fontSize}px monospace`;
+                ctx.font = `bold ${fontSize}px monospace`;
 
                 for (let i = 0; i < drops.length; i++) {
                     const text = chars[Math.floor(Math.random() * chars.length)];
+                    
+                    // Classic Matrix Digital Rain: vibrant falling streams with bright/white heads
+                    const r = Math.random();
+                    if (r > 0.98) {
+                        ctx.fillStyle = "#ffffff"; // Bright white head
+                    } else if (r > 0.85) {
+                        ctx.fillStyle = "#a7f3d0"; // Bright mint emerald
+                    } else {
+                        ctx.fillStyle = "rgba(16, 185, 129, 0.85)"; // High opacity emerald green
+                    }
+                    
                     ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
                     if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
